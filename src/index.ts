@@ -1,15 +1,20 @@
 import { type Player, system, TicksPerSecond, world } from '@minecraft/server';
 import { transferPlayer } from '@minecraft/server-admin';
 import { kick } from './utils';
-import { TRANSFER_OPTIONS, TRANSFER_TIME } from './config';
+import {
+  KICK_MESSAGES,
+  SERVER_NAME,
+  TRANSFER_OPTIONS,
+  TRANSFER_TIME,
+} from './config';
 
 /**
- * Transfers a player to the PokeBedrock Hub
+ * Transfers a player to the server
  * @param player player who should be transferred
  */
 async function transferPlayerToHub(player: Player) {
   player.sendMessage(
-    `§aYou are about to be transferred to the PokeBedrock Hub!§r`
+    `§aYou are about to be transferred to the ${SERVER_NAME}!§r`
   );
   for (let i = 0; i < TRANSFER_TIME; i++) {
     await system.waitTicks(1 * TicksPerSecond);
@@ -28,11 +33,10 @@ world.afterEvents.playerSpawn.subscribe(async ({ player }) => {
     await transferPlayerToHub(player);
   } catch (error) {
     kick(player, [
-      `§cFailed to transfer you to the PokeBedrock Hub!§r`,
+      `§cFailed to transfer you to the ${SERVER_NAME}!§r`,
       `§cError: ${error}§r`,
       '',
-      '§bPlease report this in the discord!',
-      '§fDiscord: https://discord.pokebedrock.com§r',
+      ...KICK_MESSAGES,
     ]);
   }
 });

@@ -21,15 +21,20 @@ var init_utils = __esm({
 });
 
 // src/config.ts
-var TRANSFER_OPTIONS, TRANSFER_TIME;
+var SERVER_NAME, TRANSFER_OPTIONS, TRANSFER_TIME, KICK_MESSAGES;
 var init_config = __esm({
   "src/config.ts"() {
     "use strict";
+    SERVER_NAME = "\xA7r\xA7cPoke\xA7r\xA7bBedrock\xA7r Hub";
     TRANSFER_OPTIONS = {
       hostname: "play.pokebedrock.com",
       port: 19132
     };
     TRANSFER_TIME = 10;
+    KICK_MESSAGES = [
+      "\xA7bPlease report this in the discord!",
+      "\xA7fDiscord: https://discord.pokebedrock.com\xA7r"
+    ];
   }
 });
 
@@ -42,7 +47,7 @@ var require_index = __commonJS({
     init_config();
     async function transferPlayerToHub(player) {
       player.sendMessage(
-        `\xA7aYou are about to be transferred to the PokeBedrock Hub!\xA7r`
+        `\xA7aYou are about to be transferred to the ${SERVER_NAME}!\xA7r`
       );
       for (let i = 0; i < TRANSFER_TIME; i++) {
         await system.waitTicks(1 * TicksPerSecond);
@@ -58,11 +63,10 @@ var require_index = __commonJS({
         await transferPlayerToHub(player);
       } catch (error) {
         kick(player, [
-          `\xA7cFailed to transfer you to the PokeBedrock Hub!\xA7r`,
+          `\xA7cFailed to transfer you to the ${SERVER_NAME}!\xA7r`,
           `\xA7cError: ${error}\xA7r`,
           "",
-          "\xA7bPlease report this in the discord!",
-          "\xA7fDiscord: https://discord.pokebedrock.com\xA7r"
+          ...KICK_MESSAGES
         ]);
       }
     });
