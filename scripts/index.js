@@ -20,38 +20,49 @@ var init_utils = __esm({
   }
 });
 
+// src/config.ts
+var TRANSFER_OPTIONS, TRANSFER_TIME;
+var init_config = __esm({
+  "src/config.ts"() {
+    "use strict";
+    TRANSFER_OPTIONS = {
+      hostname: "play.pokebedrock.com",
+      port: 19132
+    };
+    TRANSFER_TIME = 10;
+  }
+});
+
 // src/index.ts
 import { system, TicksPerSecond, world } from "@minecraft/server";
 import { transferPlayer } from "@minecraft/server-admin";
 var require_index = __commonJS({
   "src/index.ts"() {
     init_utils();
+    init_config();
     async function transferPlayerToHub(player) {
-      await system.waitTicks(5 * TicksPerSecond);
-      if (!player.isValid) return;
       player.sendMessage(
         `\xA7aYou are about to be transferred to the PokeBedrock Hub!\xA7r`
       );
-      await system.waitTicks(5 * TicksPerSecond);
-      if (!player.isValid) return;
-      const transferTime = 10;
-      for (let i = 0; i < transferTime; i++) {
+      for (let i = 0; i < TRANSFER_TIME; i++) {
         await system.waitTicks(1 * TicksPerSecond);
         if (!player.isValid) return;
-        player.sendMessage(`\xA7aTransferring in ${transferTime - i} seconds!\xA7r`);
+        player.sendMessage(`\xA7aTransferring in ${TRANSFER_TIME - i} seconds!\xA7r`);
       }
-      transferPlayer(player, {
-        hostname: "play.pokebedrock.com",
-        port: 19132
-      });
+      transferPlayer(player, TRANSFER_OPTIONS);
     }
     world.afterEvents.playerSpawn.subscribe(async ({ player }) => {
       try {
+        await system.waitTicks(5 * TicksPerSecond);
+        if (!player.isValid) return;
         await transferPlayerToHub(player);
       } catch (error) {
         kick(player, [
           `\xA7cFailed to transfer you to the PokeBedrock Hub!\xA7r`,
-          `\xA7cError: ${error}\xA7r`
+          `\xA7cError: ${error}\xA7r`,
+          "",
+          "\xA7bPlease report this in the discord!",
+          "\xA7fDiscord: https://discord.pokebedrock.com\xA7r"
         ]);
       }
     });

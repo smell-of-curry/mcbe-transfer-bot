@@ -1,42 +1,38 @@
 import { type Player, system, TicksPerSecond, world } from '@minecraft/server';
 import { transferPlayer } from '@minecraft/server-admin';
 import { kick } from './utils';
+import { TRANSFER_OPTIONS, TRANSFER_TIME } from './config';
 
 /**
  * Transfers a player to the PokeBedrock Hub
  * @param player player who should be transferred
  */
 async function transferPlayerToHub(player: Player) {
-  await system.waitTicks(5 * TicksPerSecond); // Await to ensure player has fully spawned in.
-  if (!player.isValid) return;
-
   player.sendMessage(
     `§aYou are about to be transferred to the PokeBedrock Hub!§r`
   );
-  await system.waitTicks(5 * TicksPerSecond);
-  if (!player.isValid) return;
-
-  const transferTime = 10;
-  for (let i = 0; i < transferTime; i++) {
+  for (let i = 0; i < TRANSFER_TIME; i++) {
     await system.waitTicks(1 * TicksPerSecond);
     if (!player.isValid) return;
 
-    player.sendMessage(`§aTransferring in ${transferTime - i} seconds!§r`);
+    player.sendMessage(`§aTransferring in ${TRANSFER_TIME - i} seconds!§r`);
   }
-
-  transferPlayer(player, {
-    hostname: 'play.pokebedrock.com',
-    port: 19132,
-  });
+  transferPlayer(player, TRANSFER_OPTIONS);
 }
 
 world.afterEvents.playerSpawn.subscribe(async ({ player }) => {
   try {
+    await system.waitTicks(5 * TicksPerSecond); // Await to ensure player has fully spawned in.
+    if (!player.isValid) return;
+
     await transferPlayerToHub(player);
   } catch (error) {
     kick(player, [
       `§cFailed to transfer you to the PokeBedrock Hub!§r`,
       `§cError: ${error}§r`,
+      '',
+      '§bPlease report this in the discord!',
+      '§fDiscord: https://discord.pokebedrock.com§r',
     ]);
   }
 });
