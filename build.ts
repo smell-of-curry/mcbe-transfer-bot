@@ -285,7 +285,7 @@ async function build(): Promise<void> {
     entryPoints: [entryPoint],
     bundle: true,
     outfile: outputFile,
-    minify: false,
+    minify: true,
     format: 'esm',
     sourcemap: true, // Source map generation must be turned on
     plugins: [notificationPlugin],
