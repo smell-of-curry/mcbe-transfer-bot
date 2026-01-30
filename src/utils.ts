@@ -2,7 +2,6 @@ import type { Player } from '@minecraft/server';
 
 /**
  * Kicks a player
- *
  * @param player player who should be kicked
  * @param message the message that should be show to player
  */

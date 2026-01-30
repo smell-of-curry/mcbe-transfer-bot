@@ -12,7 +12,7 @@ import {
  * Transfers a player to the server
  * @param player player who should be transferred
  */
-async function transferPlayerToHub(player: Player) {
+async function transferPlayerToServer(player: Player) {
   player.sendMessage(`§aYou are about to be transferred to ${SERVER_NAME}!§r`);
   for (let i = 0; i < TRANSFER_TIME; i++) {
     await system.waitTicks(1 * TicksPerSecond);
@@ -25,10 +25,10 @@ async function transferPlayerToHub(player: Player) {
 
 world.afterEvents.playerSpawn.subscribe(async ({ player }) => {
   try {
-    await system.waitTicks(5 * TicksPerSecond); // Await to ensure player has fully spawned in.
+    await system.waitTicks(5 * TicksPerSecond); // Await to ensure player is fully rendered.
     if (!player.isValid) return;
 
-    await transferPlayerToHub(player);
+    await transferPlayerToServer(player);
   } catch (error) {
     kick(player, [
       `§cFailed to transfer you to ${SERVER_NAME}!§r`,
