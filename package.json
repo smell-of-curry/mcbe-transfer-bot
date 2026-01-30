@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "prepare": "husky",
-    "build": "ts-node --project tsconfig.json ./build.ts"
+    "build": "ts-node --project tsconfig.json ./build.ts",
+    "generate:release": "ts-node --project tsconfig.json ./build-release.ts"
   },
   "lint-staged": {
     "*.ts": [
@@ -36,9 +37,12 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
+    "@types/adm-zip": "^0.5.7",
     "@types/fs-extra": "^11.0.4",
     "@typescript-eslint/eslint-plugin": "^8.53.1",
     "@typescript-eslint/parser": "^8.53.1",
+    "adm-zip": "^0.5.16",
+    "cross-env": "^7.0.3",
     "esbuild": "^0.27.2",
     "eslint": "^9.39.2",
     "eslint-plugin-explicit-exceptions": "^0.13.3",

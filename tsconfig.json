@@ -32,6 +32,11 @@
     "incremental": true,
     "tsBuildInfoFile": "./.tsbuildinfo"
   },
-  "include": ["src/**/*.ts", ".husky/scripts/*.ts", "build.ts"],
+  "include": [
+    "src/**/*.ts",
+    ".husky/scripts/*.ts",
+    "build.ts",
+    "build-release.ts"
+  ],
   "exclude": ["node_modules/***"]
 }

@@ -8,7 +8,7 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
-  "cSpell.words": ["MCBE", "pokebedrock"],
+  "cSpell.words": ["MCBE", "mcpack", "pokebedrock"],
   "cSpell.ignoreRegExpList": ["/§./g"],
   "files.watcherExclude": {
     "**/.git/objects/**": true,

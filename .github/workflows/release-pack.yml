@@ -1,0 +1,119 @@
+name: Release Pack
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "manifest.json"
+  workflow_dispatch:
+    inputs:
+      force_release:
+        description: "Force release even if version unchanged"
+        required: false
+        default: false
+        type: boolean
+
+concurrency:
+  group: release-pack-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check-version:
+    name: Check Version Change
+    runs-on: ubuntu-latest
+    outputs:
+      version_changed: ${{ steps.version-check.outputs.changed }}
+      new_version: ${{ steps.version-check.outputs.version }}
+      is_beta: ${{ steps.version-check.outputs.is_beta }}
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Check Version Change
+        id: version-check
+        run: |
+          # Get current version from manifest.json
+          CURRENT_VERSION=$(node -e "console.log(require('./manifest.json').header.version.join('.'))")
+          echo "Current version: $CURRENT_VERSION"
+          echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+
+          # Check if this is a manual trigger with force
+          if [[ "${{ github.event.inputs.force_release }}" == "true" ]]; then
+            echo "Force release requested"
+            echo "changed=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Get previous version from manifest.json (from previous commit)
+          git show HEAD~1:manifest.json > /tmp/prev_manifest.json 2>/dev/null || echo '{"header":{"version":[0,0,0]}}' > /tmp/prev_manifest.json
+          PREV_VERSION=$(node -e "console.log(require('/tmp/prev_manifest.json').header.version.join('.'))")
+          echo "Previous version: $PREV_VERSION"
+
+          # Compare versions
+          if [[ "$CURRENT_VERSION" != "$PREV_VERSION" ]]; then
+            echo "Version changed from $PREV_VERSION to $CURRENT_VERSION"
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "Version unchanged"
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+  build-and-release:
+    name: Build and Release
+    runs-on: ubuntu-latest
+    needs: check-version
+    if: needs.check-version.outputs.version_changed == 'true'
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js & Cache Dependencies
+        uses: actions/setup-node@v4
+        with:
+          node-version: "latest"
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: npm ci --omit=optional
+
+      - name: Generate Release Pack
+        run: npm run generate:release
+        env:
+          CI: true
+
+      - name: Find Generated .mcpack File
+        id: find-mcpack
+        run: |
+          # The mcpack is generated in the parent directory
+          MCPACK_FILE=$(ls ../*.mcpack 2>/dev/null | head -1)
+          if [[ -z "$MCPACK_FILE" ]]; then
+            echo "Error: No .mcpack file found"
+            exit 1
+          fi
+          MCPACK_NAME=$(basename "$MCPACK_FILE")
+          echo "Found: $MCPACK_NAME"
+          echo "mcpack_path=$MCPACK_FILE" >> $GITHUB_OUTPUT
+          echo "mcpack_name=$MCPACK_NAME" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ needs.check-version.outputs.new_version }}
+          name: MCBE Transfer Bot v${{ needs.check-version.outputs.new_version }}
+          body: |
+            ### Installation
+            1. Download the `.mcpack` file below
+            2. Double-click to install in Minecraft Bedrock Edition
+            3. Apply the behavior pack to your realm
+
+            ---
+            *This is an automatically generated release from the main branch.*
+          draft: false
+          files: ${{ steps.find-mcpack.outputs.mcpack_path }}
+          fail_on_unmatched_files: true

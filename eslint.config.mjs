@@ -15,7 +15,8 @@ export default [
     files: [
       '.husky/scripts/*.ts',
       'src/**/*.ts',
-      'build.ts'
+      'build.ts',
+      'build-release.ts'
     ],
     languageOptions: {
       parser: tsParser,
