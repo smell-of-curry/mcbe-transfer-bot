@@ -1,0 +1,42 @@
+# Universal command helper for cross-platform compatibility
+get_cmd() {
+  local cmd="$1"
+  case "$(uname)" in
+  *CYGWIN* | *MINGW* | *MSYS*)
+    echo "${cmd}.cmd"
+    ;;
+  *)
+    echo "$cmd"
+    ;;
+  esac
+}
+
+# Run TypeScript type check on all files
+echo "🔍 Running TypeScript type check..."
+$(get_cmd npx) tsc --noEmit
+
+# Run lint-staged on staged files
+lint-staged
+
+# Build index.js if src files changed
+if [ -n "$(git diff --cached --name-only -- 'src')" ]; then
+  # Check if there are unstaged changes in src
+  if [ -n "$(git diff --name-only -- 'src')" ]; then
+    echo "🔄 Stashing unstaged changes before build..."
+    # Stash unstaged changes (keep staged changes)
+    git stash push --keep-index --include-untracked -m "pre-commit: temporary stash of unstaged changes" -- src/
+    stash_created=true
+  else
+    stash_created=false
+  fi
+
+  # Build with only staged changes
+  $(get_cmd npm) run build pre-commit
+  git add scripts/index.js 2>/dev/null || true
+
+  # Restore unstaged changes if we stashed them
+  if [ "$stash_created" = true ]; then
+    echo "🔄 Restoring unstaged changes..."
+    git stash pop --quiet
+  fi
+fi

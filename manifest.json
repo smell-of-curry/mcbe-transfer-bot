@@ -1,0 +1,46 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "pack.name",
+    "description": "pack.description",
+    "min_engine_version": [1, 21, 131],
+    "uuid": "3d8fac13-d7c5-40f8-b4da-82c5f897423b",
+    "version": [0, 1, 0]
+  },
+  "modules": [
+    {
+      "description": "Data Module",
+      "type": "data",
+      "uuid": "092288a4-278f-40a1-9ae4-6870d062c077",
+      "version": [0, 1, 0]
+    },
+    {
+      "description": "Script API Module",
+      "language": "javascript",
+      "type": "script",
+      "uuid": "9091509e-481e-4158-bac8-59ffe581fc88",
+      "version": [1, 0, 0],
+      "entry": "scripts/index.js"
+    }
+  ],
+  "capabilities": ["script_eval"],
+  "dependencies": [
+    {
+      "module_name": "@minecraft/server",
+      "version": "beta"
+    },
+    {
+      "module_name": "@minecraft/server-ui",
+      "version": "beta"
+    },
+    {
+      "module_name": "@minecraft/server-admin",
+      "version": "beta"
+    }
+  ],
+  "metadata": {
+    "authors": ["Smell of curry"],
+    "license": "MIT",
+    "url": "https://github.com/smell-of-curry/mcbe-transfer-bot"
+  }
+}

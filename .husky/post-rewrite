@@ -1,0 +1,22 @@
+# Rebuild index.js after rebase/amend to ensure it matches the rewritten source code
+# This runs after: git rebase, git commit --amend, git filter-branch
+
+get_cmd() {
+  local cmd="$1"
+  case "$(uname)" in
+  *CYGWIN* | *MINGW* | *MSYS*)
+    echo "${cmd}.cmd"
+    ;;
+  *)
+    echo "$cmd"
+    ;;
+  esac
+}
+
+# Only run after rebase (not after amend - amend already triggers pre-commit)
+if [ "$1" = "rebase" ]; then
+  echo "🔄 Rebuilding index.js after rebase..."
+  $(get_cmd npm) run build
+  echo "✅ index.js rebuilt. Don't forget to stage it if needed: git add scripts/index.js"
+fi
+

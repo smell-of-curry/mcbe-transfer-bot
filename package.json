@@ -1,0 +1,54 @@
+{
+  "name": "mcbe-transfer-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prepare": "husky",
+    "build": "ts-node --project tsconfig.json ./build.ts"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "prettier --write",
+      "cross-env NODE_OPTIONS=\"--max-old-space-size=8192\" eslint --fix"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smell-of-curry/mcbe-transfer-bot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/smell-of-curry/mcbe-transfer-bot/issues"
+  },
+  "homepage": "https://github.com/smell-of-curry/mcbe-transfer-bot#readme",
+  "overrides": {
+    "@minecraft/server": "2.5.0-beta.1.21.132-stable"
+  },
+  "dependencies": {
+    "@minecraft/server-admin": "1.0.0-beta.1.21.132-stable"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "@types/fs-extra": "^11.0.4",
+    "@typescript-eslint/eslint-plugin": "^8.53.1",
+    "@typescript-eslint/parser": "^8.53.1",
+    "esbuild": "^0.27.2",
+    "eslint": "^9.39.2",
+    "eslint-plugin-explicit-exceptions": "^0.13.3",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-minecraft-linting": "^2.0.12",
+    "fs-extra": "^11.3.3",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.8.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.9.3"
+  }
+}

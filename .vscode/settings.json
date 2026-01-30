@@ -1,0 +1,19 @@
+{
+  "eslint.validate": ["typescript", "json"],
+  "eslint.run": "onSave",
+  "editor.formatOnSave": true,
+  "typescript.validate.enable": true,
+  "files.autoSave": "off",
+  "files.eol": "\n",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "cSpell.words": ["MCBE", "pokebedrock"],
+  "cSpell.ignoreRegExpList": ["/§./g"],
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "/scripts/**": true
+  }
+}
