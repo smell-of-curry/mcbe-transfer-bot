@@ -4,14 +4,14 @@
     "name": "pack.name",
     "description": "pack.description",
     "min_engine_version": [1, 21, 131],
-    "uuid": "3d8fac13-d7c5-40f8-b4da-82c5f897423b",
+    "uuid": "98a3ea1e-60e3-4eaa-8107-453128920f08",
     "version": [0, 1, 0]
   },
   "modules": [
     {
       "description": "Data Module",
       "type": "data",
-      "uuid": "092288a4-278f-40a1-9ae4-6870d062c077",
+      "uuid": "0cc2c13d-71bb-4f4a-b9ab-e5ba4bd944ad",
       "version": [0, 1, 0]
     },
     {
