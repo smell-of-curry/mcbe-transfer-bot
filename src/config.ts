@@ -3,7 +3,7 @@ import type { TransferPlayerIpPortOptions } from '@minecraft/server-admin';
 /**
  * The name of the server
  */
-export const SERVER_NAME = '§r§cPoke§r§bBedrock§r Hub';
+export const SERVER_NAME = 'the §r§cPoke§r§bBedrock§r Hub';
 
 /**
  * The options for the transfer player

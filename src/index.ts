@@ -13,14 +13,12 @@ import {
  * @param player player who should be transferred
  */
 async function transferPlayerToHub(player: Player) {
-  player.sendMessage(
-    `§aYou are about to be transferred to the ${SERVER_NAME}!§r`
-  );
+  player.sendMessage(`§aYou are about to be transferred to ${SERVER_NAME}!§r`);
   for (let i = 0; i < TRANSFER_TIME; i++) {
     await system.waitTicks(1 * TicksPerSecond);
     if (!player.isValid) return;
 
-    player.sendMessage(`§aTransferring in ${TRANSFER_TIME - i} seconds!§r`);
+    player.sendMessage(`§ain ${TRANSFER_TIME - i} second(s)!§r`);
   }
   transferPlayer(player, TRANSFER_OPTIONS);
 }
@@ -33,7 +31,7 @@ world.afterEvents.playerSpawn.subscribe(async ({ player }) => {
     await transferPlayerToHub(player);
   } catch (error) {
     kick(player, [
-      `§cFailed to transfer you to the ${SERVER_NAME}!§r`,
+      `§cFailed to transfer you to ${SERVER_NAME}!§r`,
       `§cError: ${error}§r`,
       '',
       ...KICK_MESSAGES,
