@@ -1,4 +1,8 @@
 import type { transferPlayer } from '@minecraft/server-admin';
+import {
+  MinecraftBlockTypes,
+  MinecraftDimensionTypes,
+} from '@minecraft/vanilla-data';
 
 /**
  * The name of the server to display to the player
@@ -25,3 +29,32 @@ export const KICK_MESSAGES = [
   '§bPlease report this in the discord!',
   '§fDiscord: https://discord.pokebedrock.com§r',
 ];
+
+/**
+ * The y level in-which ground should be set for the player.
+ */
+export const GROUND_LEVEL = -64;
+
+/**
+ * The type of block to use for the ground base.
+ */
+export const GROUND_BASE_TYPE = MinecraftBlockTypes.Stone;
+
+/**
+ * The size of the ground base.
+ */
+export const GROUND_BASE_SIZE = 10;
+
+/**
+ * The dimension the player must be in, and where the ground will be.
+ */
+export const TRANSPORT_DIMENSION = MinecraftDimensionTypes.Overworld;
+
+/**
+ * The messages to display to the player when they are warned about their action.
+ */
+export const PROTECTION_MESSAGES = {
+  break: `§cYou cannot break blocks here!§r`,
+  place: `§cYou cannot place blocks here!§r`,
+  dimension: `§cYou cannot be in this dimension!§r`,
+};

@@ -1,31 +1,38 @@
-import { type Player, system, TicksPerSecond, world } from '@minecraft/server';
-import { transferPlayer } from '@minecraft/server-admin';
-import { kick } from './utils';
 import {
-  KICK_MESSAGES,
-  SERVER_NAME,
-  TRANSFER_OPTIONS,
-  TRANSFER_TIME,
-} from './config';
+  GameMode,
+  InputPermissionCategory,
+  system,
+  TicksPerSecond,
+  world,
+} from '@minecraft/server';
+import { ensureGround, kick, transferPlayerToServer } from './utils';
+import { KICK_MESSAGES, SERVER_NAME } from './config';
+import './protection';
 
 /**
- * Transfers a player to the server
- * @param player player who should be transferred
+ * A flag to ensure the ground is only set once.
  */
-async function transferPlayerToServer(player: Player) {
-  player.sendMessage(`§aYou are about to be transferred to ${SERVER_NAME}!§r`);
-  for (let i = 0; i < TRANSFER_TIME; i++) {
-    await system.waitTicks(1 * TicksPerSecond);
-    if (!player.isValid) return;
-
-    player.sendMessage(`§ain ${TRANSFER_TIME - i} second(s)!§r`);
-  }
-  transferPlayer(player, TRANSFER_OPTIONS);
-}
+let hasFirstPlayerSpawn = false;
 
 world.afterEvents.playerSpawn.subscribe(async ({ player }) => {
   try {
-    await system.waitTicks(5 * TicksPerSecond); // Await to ensure player is fully rendered.
+    // Set to Creative to prevent accidental death.
+    player.setGameMode(GameMode.Creative);
+
+    // Disable movement to prevent griefing.
+    player.inputPermissions.setPermissionCategory(
+      InputPermissionCategory.Movement,
+      false
+    );
+
+    // Ensure the ground is there.
+    if (!hasFirstPlayerSpawn) {
+      hasFirstPlayerSpawn = true;
+      await ensureGround();
+    }
+
+    // Await to ensure player is fully rendered.
+    await system.waitTicks(5 * TicksPerSecond);
     if (!player.isValid) return;
 
     await transferPlayerToServer(player);

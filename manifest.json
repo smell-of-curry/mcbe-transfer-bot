@@ -5,14 +5,14 @@
     "description": "pack.description",
     "min_engine_version": [1, 21, 132],
     "uuid": "98a3ea1e-60e3-4eaa-8107-453128920f08",
-    "version": [0, 1, 1]
+    "version": [1, 0, 0]
   },
   "modules": [
     {
       "description": "Data Module",
       "type": "data",
       "uuid": "0cc2c13d-71bb-4f4a-b9ab-e5ba4bd944ad",
-      "version": [0, 1, 1]
+      "version": [1, 0, 0]
     },
     {
       "description": "Script API Module",
@@ -27,10 +27,6 @@
   "dependencies": [
     {
       "module_name": "@minecraft/server",
-      "version": "beta"
-    },
-    {
-      "module_name": "@minecraft/server-ui",
       "version": "beta"
     },
     {

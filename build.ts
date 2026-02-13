@@ -289,12 +289,7 @@ async function build(): Promise<void> {
     format: 'esm',
     sourcemap: true, // Source map generation must be turned on
     plugins: [notificationPlugin],
-    external: [
-      '@minecraft/server',
-      '@minecraft/server-ui',
-      '@minecraft/server-common',
-      '@minecraft/server-admin',
-    ],
+    external: ['@minecraft/server', '@minecraft/server-admin'],
     mainFields: ['main'], // Needed for @minecraft/math and @minecraft/vanilla-data
   };
 
