@@ -53,7 +53,7 @@ function createMcpack(): string {
   const zip = new AdmZip();
 
   // Files and directories to include in the pack
-  const includeItems = ['manifest.json', 'scripts', 'texts'];
+  const includeItems = ['scripts', 'texts', 'manifest.json', 'pack_icon.png'];
   for (const item of includeItems) {
     const itemPath = path.join(projectRoot, item);
     if (!fs.existsSync(itemPath)) {
