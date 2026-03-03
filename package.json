@@ -49,7 +49,7 @@
     "eslint-plugin-explicit-exceptions": "^0.13.3",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-minecraft-linting": "^2.0.12",
-    "fs-extra": "^11.3.3",
+    "fs-extra": "^11.3.4",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "prettier": "^3.8.1",
